@@ -1,13 +1,14 @@
+import 'package:docscan/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'theme.dart';
+import '../theme.dart';
 
 class LoginPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     return Scaffold(
+      resizeToAvoidBottomInset: false,  
         backgroundColor: Colors.white,
         body: Container(
             padding: EdgeInsets.all(20),
@@ -49,13 +50,14 @@ class LoginPage extends StatelessWidget {
                   //   ),
                   // ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(10,20,10,10),
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: TextFormField(
                       cursorColor: Color(0x1a34395E),
                       controller: nameController,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: false,
                       decoration: InputDecoration(
+                        icon: Icon(Icons.email), iconColor: purple,
                         hintText: 'email',
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -65,13 +67,14 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.all(10),
-                    color: Color(0x1a34395E),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
                     child: TextFormField(
+                      cursorColor: Color(0x1a34395E),
                       controller: passwordController,
-                      autofocus: false,
                       obscureText: true,
+                      autofocus: false,
                       decoration: InputDecoration(
+                        icon: Icon(Icons.key),iconColor: purple,
                         hintText: 'password',
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -79,7 +82,38 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20.0)),
                       ),
                     ),
-                  )
+                  ),
+                  Row(
+                    children: [
+                      const Text("Dont have an account?", style: TextStyle(fontSize: 16),),
+                      Text(" Create One", style: TextStyle(color: purple, fontSize: 16,))
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 30),
+                    height: 50,
+                    width: 500,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFF6777EF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      // onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      },
+                      child: const Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),
+                      ),
+                    ),
+                  ),
                 ]))));
   }
 }

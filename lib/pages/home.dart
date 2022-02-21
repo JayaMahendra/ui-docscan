@@ -1,13 +1,19 @@
-import 'theme.dart';
+import '../theme.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();  
 }
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  
+void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +36,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                margin: EdgeInsets.all(30),
+                padding: const EdgeInsets.fromLTRB(20, 5, 5, 5),
+                margin: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
-                    color: Color(0x1a34395E),
+                    color: const Color(0x1a34395E),
                     borderRadius: BorderRadius.circular(50)),
-                child: TextField(
+                child: const TextField(
                   decoration: InputDecoration(
                       icon: Icon(Icons.search),
                       enabledBorder: InputBorder.none,
@@ -48,14 +54,14 @@ class _HomePageState extends State<HomePage> {
               Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                   ),
                   Text(
                     "You don't have any documents!",
                     style: text,
                   ),
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                   ),
                   Center(
                       child: Text(
@@ -67,34 +73,29 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        )))),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          iconSize: 30,
-          backgroundColor: Colors.white30,
-          fixedColor: Color(0xFF6777EF),
-          items: <BottomNavigationBarItem>[
+        )))),               
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: const Color(0xffF4F6F9),
+            unselectedItemColor: Color(0xFFB7BEF5),
+          // currentIndex: _currentIndex,
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.folder_sharp),
+              label: 'Document',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.camera_alt,
-              ),
+              icon: Icon(Icons.camera_alt),
+              label: 'Scan',              
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-              ),
+              icon: Icon(Icons.settings),
+              label: 'Setting',
             ),
           ],
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-        ));
+          currentIndex: _currentIndex,
+        selectedItemColor: purple,
+        onTap: _onItemTapped,
+      ),
+    );
   }
 }

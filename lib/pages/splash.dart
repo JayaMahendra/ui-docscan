@@ -1,4 +1,5 @@
-import 'theme.dart';
+import 'package:docscan/pages/login.dart';
+import '../theme.dart';
 import 'package:flutter/material.dart';
 
 class Splash extends StatelessWidget {
@@ -34,7 +35,7 @@ class Splash extends StatelessWidget {
                   ),
                   Text("Get Started", style: desc),
                   Text("Lets Secure Your Important Documents", style: title),
-                  Padding(padding: EdgeInsets.only(top: 30)),
+                  const Padding(padding: EdgeInsets.only(top: 30)),
                   Container(
                     height: 50,
                     width: 500,
@@ -44,8 +45,13 @@ class Splash extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           )),
-                      onPressed: () {},
-                      child: Text(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                      child: const Text(
                         "Next",
                         style: TextStyle(
                           color: Color(0xffffffff),

@@ -1,8 +1,6 @@
-import 'package:docscan/login.dart';
-import 'package:docscan/splash.dart';
+import 'package:docscan/pages/login.dart';
+import 'package:docscan/pages/splash.dart';
 import 'package:flutter/material.dart';
-import 'theme.dart';
-import 'home.dart';
 
 void main() {
   runApp(MyApp());
