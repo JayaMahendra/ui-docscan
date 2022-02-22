@@ -8,7 +8,7 @@ class LoginPage extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     return Scaffold(
-      resizeToAvoidBottomInset: false,  
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Container(
             padding: EdgeInsets.all(20),
@@ -39,16 +39,6 @@ class LoginPage extends StatelessWidget {
                     "Login",
                     style: title,
                   ),
-                  // Container(
-                  //   padding: const EdgeInsets.all(10),
-                  //   child: TextField(
-                  //     controller: passwordController,
-                  //     decoration: const InputDecoration(
-                  //       border: ,
-                  //       labelText: 'Password',
-                  //     ),
-                  //   ),
-                  // ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: TextFormField(
@@ -57,7 +47,8 @@ class LoginPage extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       autofocus: false,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.email), iconColor: purple,
+                        icon: Icon(Icons.email),
+                        iconColor: purple,
                         hintText: 'email',
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -74,7 +65,8 @@ class LoginPage extends StatelessWidget {
                       obscureText: true,
                       autofocus: false,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.key),iconColor: purple,
+                        icon: Icon(Icons.key),
+                        iconColor: purple,
                         hintText: 'password',
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -85,8 +77,19 @@ class LoginPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      const Text("Dont have an account?", style: TextStyle(fontSize: 16),),
-                      Text(" Create One", style: TextStyle(color: purple, fontSize: 16,))
+                      const Text(
+                        "Dont have an account?",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, "myRoute");
+                          },
+                          child: Text(" Create One",
+                              style: TextStyle(
+                                color: purple,
+                                fontSize: 16,
+                              )))
                     ],
                   ),
                   Container(
