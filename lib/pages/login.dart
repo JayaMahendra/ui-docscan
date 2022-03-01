@@ -1,19 +1,63 @@
 import 'package:docscan/pages/home.dart';
+import 'package:docscan/services/auth.dart';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class LoginPage extends StatelessWidget {
+  final AuthBloc authBloc;
+
+    const LoginPage({Key key, this.authBloc}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
+class _LoginPageState extends State<LoginPage> {
+  AuthBloc get _authBloc => widget.authBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => _authBloc,
+      child: LoginForm(
+        authBloc: _authBloc,
+      ),
+    );
+  }
+}
+
+
+class LoginForm extends StatelessWidget {
+  final AuthBloc authBloc;
+
+  LoginForm({Key key, this.authBloc}) : super(key: key);
+
+  final TextEditingController emailController =
+      TextEditingController(text: "akughoni@gmail.com");
+  final TextEditingController passwordController =
+      TextEditingController(text: "asdasdasd");
+
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Container(
             padding: EdgeInsets.all(20),
             child: SafeArea(
-                child: Column(
+                child: Form(
+                  key: _formKey,
+                  child:
+                Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                   Row(
@@ -43,7 +87,7 @@ class LoginPage extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: TextFormField(
                       cursorColor: Color(0x1a34395E),
-                      controller: nameController,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: false,
                       decoration: InputDecoration(
@@ -103,12 +147,13 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           )),
                       // onPressed: () {},
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
-                      },
+                      // onPressed: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => HomePage()),
+                      //   );
+                      // },
+                      onPressed: _login,
                       child: const Text(
                         "Sign In",
                         style: TextStyle(
@@ -117,6 +162,12 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                ]))));
+                ])) )));
   }
-}
+    void _login() {
+    authBloc.add(LoginProcess(
+      email: emailController.text,
+      password: passwordController.text,
+    ));
+  }
+}}
