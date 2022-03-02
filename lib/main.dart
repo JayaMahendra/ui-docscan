@@ -1,19 +1,68 @@
-import 'package:docscan/pages/login.dart';
-import 'package:docscan/pages/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:docscan/pages/login.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:docscan/repository/auth_repository.dart';
+import 'package:docscan/state/auth_state.dart';
+import 'package:docscan/pages/home.dart';
+import 'blocs/Auth_bloc.dart';
+import 'event/auth_event.dart';
+import 'pages/login.dart';
 
 void main() {
-  runApp(MyApp());
+  final AuthRepository authRepository = AuthRepository();
+  runApp(BlocProvider(
+    create: (context) {
+      return AuthBloc(authRepository: authRepository);
+    },
+    child: MyApp(
+      authRepository: authRepository,
+      authBloc: AuthBloc(authRepository: authRepository),
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
+  final AuthRepository authRepository;
+  final AuthBloc authBloc;
+
+  const MyApp({Key? key, required this.authRepository, required this.authBloc})
+      : super(key: key);
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Poppins',
-        ),
-        home: Splash());
+      debugShowCheckedModeBanner: false,
+      home: BlocBuilder(
+        bloc: authBloc,
+        builder: (context, AuthState state) {
+          if (state is AuthInit) {
+            authBloc.add(AuthCheck());
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          if (state is AuthHasToken || state is AuthData)
+            return HomePage(
+              authBloc: authBloc,
+            );
+          if (state is AuthFailed || state is LoginFailed)
+            return LoginPage(authBloc: authBloc);
+          if (state is AuthLoading)
+            return Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+
+          return Container();
+        },
+      ),
+    );
   }
 }

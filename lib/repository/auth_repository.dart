@@ -1,17 +1,16 @@
 import 'dart:convert';
-import 'package:frontend_api_laravel/model/data_model.dart';
+import 'package:docscan/model/data_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  Future loginUser(String _email, String _password, String device) async {
-    String baseUrl = "http://10.0.2.2:8000/api/auth/login";
+  Future loginUser(String _email, String _password) async {
+    String baseUrl = "http://127.0.0.1:8000/api/auth/login";
 
     try {
       var response = await http.post(baseUrl, body: {
         'email': _email,
         'password': _password,
-        'device_name': device
       });
 
       var jsonResponse = json.decode(response.body);
@@ -22,7 +21,7 @@ class AuthRepository {
   }
 
   Future userLogout(String token) async {
-    String baseUrl = "http://10.0.2.2:8000/api/auth/logout";
+    String baseUrl = "http://127.0.0.1:8000/api/auth/logout";
 
     try {
       var response = await http.post(baseUrl, headers: {
@@ -38,7 +37,7 @@ class AuthRepository {
   }
 
   Future getData(String token) async {
-    String baseUrl = "http://10.0.2.2:8000/api/auth/me";
+    String baseUrl = "http://127.0.0.1:8000/api/me";
 
     try {
       var response = await http.get(baseUrl, headers: {
@@ -56,7 +55,7 @@ class AuthRepository {
   Future hasToken() async {
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences local = await _prefs;
-    final String token = local.getString("token_sanctum") ?? null;
+    final String? token = local.getString("token_sanctum") ?? null;
     if (token != null) return token;
     return null;
   }

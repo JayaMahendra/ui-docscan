@@ -1,8 +1,8 @@
 class LoginAuth {
-  String message;
-  TokenAuth data;
+  late String message;
+  late TokenAuth data;
 
-  LoginAuth({this.message, this.data});
+  LoginAuth({required this.message, required this.data});
   LoginAuth.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     data = TokenAuth.fromJson(json['data']);
@@ -10,8 +10,8 @@ class LoginAuth {
 }
 
 class TokenAuth {
-  String token;
-  TokenAuth({this.token});
+  late String token;
+  TokenAuth({required this.token});
 
   TokenAuth.fromJson(Map<String, dynamic> data) {
     token = data['token'];
@@ -19,10 +19,10 @@ class TokenAuth {
 }
 
 class User {
-  String name;
-  String email;
+  late String name;
+  late String email;
 
-  User({this.name, this.email});
+  User({required this.name, required this.email});
 
   User.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -36,9 +36,9 @@ class User {
 }
 
 class Logout {
-  String message;
+  late String message;
 
-  Logout({this.message});
+  Logout({required this.message});
 
   Logout.fromJson(Map<String, dynamic> json) {
     message = json['message'];

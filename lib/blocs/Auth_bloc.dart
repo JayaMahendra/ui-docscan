@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend_api_laravel/event/auth_event.dart';
-import 'package:frontend_api_laravel/model/data_model.dart';
-import 'package:frontend_api_laravel/repository/auth_repository.dart';
-import 'package:frontend_api_laravel/state/auth_state.dart';
+import 'package:docscan/event/auth_event.dart';
+import 'package:docscan/model/data_model.dart';
+import 'package:docscan/repository/auth_repository.dart';
+import 'package:docscan/state/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 
-  AuthBloc({this.authRepository}) : assert(authRepository != null);
+  AuthBloc({required this.authRepository}) : assert(authRepository != null);
 
   @override
   AuthState get initialState => AuthInit();
@@ -35,8 +35,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is LoginProcess) {
       yield AuthLoading();
       try {
-        final login = await authRepository.loginUser(
-            event.email, event.password, "Mobile Sanctum");
+        final login =
+            await authRepository.loginUser(event.email, event.password);
         if (login.message != "failed") {
           yield LoginSuccess();
           await authRepository.setLocalToken(login.data.token);
