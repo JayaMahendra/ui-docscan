@@ -1,122 +1,95 @@
-import 'package:docscan/pages/home.dart';
 import 'package:flutter/material.dart';
-import '../theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:docscan/blocs/Auth_bloc.dart';
+import 'package:docscan/event/auth_event.dart';
+import 'package:docscan/state/auth_state.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  final AuthBloc authBloc;
+
+  const LoginPage({Key? key, required this.authBloc}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  AuthBloc get _authBloc => widget.authBloc;
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: SafeArea(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        "assets/images/document_logo.png",
-                        height: 40,
-                        width: 40,
+    return BlocProvider(
+      create: (context) => _authBloc,
+      child: LoginForm(
+        authBloc: _authBloc,
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  final AuthBloc authBloc;
+
+  LoginForm({Key? key, required this.authBloc}) : super(key: key);
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController(text: "");
+
+  final TextEditingController passwordController =
+      TextEditingController(text: "");
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+        bloc: widget.authBloc,
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Login Page"),
+            ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(labelText: "Email"),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15),
+                      TextField(
+                        controller: passwordController,
+                        decoration: InputDecoration(labelText: "Password"),
                       ),
-                      Text(
-                        "Scanner App",
-                        style: text,
-                      )
+                      RaisedButton(
+                        onPressed: _login,
+                        child: (state is AuthLoading)
+                            ? Text("Please wait")
+                            : Text("Login"),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      (state is LoginFailed) ? Text(state.error) : Text(""),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 80),
-                  ),
-                  Text(
-                    "Login",
-                    style: title,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                    child: TextFormField(
-                      cursorColor: Color(0x1a34395E),
-                      controller: nameController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.email),
-                        iconColor: purple,
-                        hintText: 'email',
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
-                    child: TextFormField(
-                      cursorColor: Color(0x1a34395E),
-                      controller: passwordController,
-                      obscureText: true,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.key),
-                        iconColor: purple,
-                        hintText: 'password',
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        "Dont have an account?",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, "myRoute");
-                          },
-                          child: Text(" Create One",
-                              style: TextStyle(
-                                color: purple,
-                                fontSize: 16,
-                              )))
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    height: 50,
-                    width: 500,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFF6777EF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )),
-                      // onPressed: () {},
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
-                      },
-                      child: const Text(
-                        "Sign In",
-                        style: TextStyle(
-                          color: Color(0xffffffff),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]))));
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _login() {
+    widget.authBloc.add(LoginProcess(
+      email: emailController.text,
+      password: passwordController.text,
+    ));
   }
 }
